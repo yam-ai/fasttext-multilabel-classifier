@@ -11,10 +11,10 @@ True
 >>> u == '世 界   你 好     Hello    World  '
 True
 >>> v = normalize_spaces(u)
->>> v == u'世 界 你 好 Hello World '
+>>> v == u'世 界 你 好 Hello World'
 True
 >>> preprocess(s)
-'世 界 你 好 hello world '
+'世 界 你 好 hello world'
 """
 
 import re
@@ -29,7 +29,7 @@ def tokenize_unicode_chars(s):
 
 
 def normalize_spaces(s):
-    return re.sub(r'\s+', ' ', s, flags=re.UNICODE).strip()
+    return ' '.join(s.split())
 
 
 def preprocess(s):
