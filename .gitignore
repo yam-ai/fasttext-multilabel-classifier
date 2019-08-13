@@ -125,3 +125,6 @@ dmypy.json
 
 # Editor temp files
 .vscode/
+
+# Project files to ignore
+data/

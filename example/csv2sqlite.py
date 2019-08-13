@@ -12,7 +12,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
 
 import sys
 import sqlite3
@@ -38,6 +37,7 @@ schema = '''
         );
         DROP INDEX IF EXISTS label_index;
         CREATE INDEX label_index ON labels (label);
+        CREATE INDEX text_id_index ON labels (text_id);
     '''
 try:
     opts, _ = getopt.getopt(sys.argv[1:], 'i:o:n:')
