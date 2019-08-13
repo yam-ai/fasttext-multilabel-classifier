@@ -1,0 +1,2 @@
+fasttext==0.9.1
+falcon==2.0.0

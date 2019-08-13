@@ -14,26 +14,37 @@
 # limitations under the License.
 
 import sys
-from http.server import HTTPServer
-from http.server import BaseHTTPRequestHandler
-import logging
-
-PORT = 8000
+import falcon
+from wsgiref import simple_server
+import serve
 
 
-def run(app_name, server_class=HTTPServer, handler_class=BaseHTTPRequestHandler):
-    logger = logging.getLogger(app_name)
-    logger.setLevel(logging.INFO)
-    ch = logging.StreamHandler()
-    formatter = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    ch.setFormatter(formatter)
-    logger.addHandler(ch)
-    logger.info('Serving at port {}...'.format(PORT))
-    server_address = ('', PORT)
-    httpd = server_class(server_address, handler_class)
-    httpd.serve_forever()
+class MultiLabelClassifierServer:
+    pass
+
+
+class ClassifierResource:
+    def __init__(self, classifier):
+        self.classifier = classifier
+
+    def on_get(self, req, resp):
+        """Handles POST requests"""
+        result = {
+            'msg': 'to be implemented'
+        }
+        resp.media = result
+
+
+def create_app():
+    classifier = MultiLabelClassifierServer()
+    app = falcon.API()
+    app.add_route('/classifier', ClassifierResource(classifier))
+    return app
 
 
 if __name__ == '__main__':
-    run(sys.argv[0])
+    PORT = 8000
+    app = create_app()
+    with simple_server.make_server('', PORT, app) as httpd:
+        print('Serving HTTP on port {}...'.format(PORT))
+        httpd.serve_forever()
