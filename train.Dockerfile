@@ -20,8 +20,7 @@ COPY . /src/
 
 RUN apk add --update \
     build-base \
-    && pip install -r /src/requirements.txt \
-    && apk del build-base
+    && pip install -r /src/requirements.txt
 
 ENV TRAIN_FILE=/train.db
 ENV MODEL_FILE=/model.bin
