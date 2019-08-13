@@ -23,7 +23,6 @@ RUN apk add --update \
     && pip install -r /src/requirements.txt \
     && apk del build-base
 
-
 ENV TRAIN_FILE=/train.db
 ENV MODEL_FILE=/model.bin
 ENV SRC_DIR=/src
