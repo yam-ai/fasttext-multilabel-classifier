@@ -121,4 +121,9 @@ You will get the response like the following:
 ```
 ### 6. Profesional services
 
-If you need our architecture consultancy or software customization services, please find us at https://www.yam.ai or https://twitter.com/theYAMai.
+If you need any consultancy and support services from [YAM AI Machinery](https://www.yam.ai), please find us at:
+* https://www.yam.ai
+* https://github.com/yam-ai
+* https://twitter.com/theYAMai
+* https://www.linkedin.com/company/yamai
+* https://www.facebook.com/theYAMai
