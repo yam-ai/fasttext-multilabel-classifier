@@ -119,6 +119,6 @@ You will get the response like the following:
 ```
 [{"id": 0, "scores": {"toxic": 0.8602798581123352, "insult": 0.09022565186023712, "obscene": 0.0350012332201004, "identity_hate": 0.009289986453950405, "threat": 0.0028602471575140953, "severe_toxic": 0.002403183374553919}}, {"id": 1, "scores": {"toxic": 0.6345628499984741, "insult": 0.18238091468811035, "obscene": 0.1788458377122879, "identity_hate": 0.0024415855295956135, "severe_toxic": 0.0016292480286210775, "threat": 0.00019956909818574786}}]
 ```
-### 6. Consultation or customization services
+### 6. Profesional services
 
-If you need any consultation or customization services from us, please find us at https://www.yam.ai or https://twitter.com/theYAMai.
+If you need our architecture consultancy or software customization services, please find us at https://www.yam.ai or https://twitter.com/theYAMai.
