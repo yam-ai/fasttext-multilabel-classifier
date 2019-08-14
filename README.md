@@ -31,7 +31,7 @@ The python script in [`example/csv2sqlite.py`](https://github.com/yam-ai/fasttex
 
 To convert `train.csv` to `data.db`, run the following commands:
 ```sh
-$ python3 csv2sqlite.py -i /downloads/toxic-comment/train.csv -o /repos/bert-multilabel-classifier/example/data.db
+python3 csv2sqlite.py -i /downloads/toxic-comment/train.csv -o /repos/bert-multilabel-classifier/example/data.db
 ```
 You can also use the `-n` flag to convert only a subset of examples in the training csv file to reduce the training database size. For example, you can use `-n 1000` to convert only the first 1,000 examples in the csv file into the training database. This may be necessary if there is not enough memory to train the model with the entire raw training set or you want to shorten the training time.
 
@@ -41,26 +41,26 @@ The training and serving parameters can be modified in [`settings.py`](https://g
 ### 3. Train the model
 Build the docker image for training:
 ```sh
-$ docker build -f train.Dockerfile -t classifier-train .
+docker build -f train.Dockerfile -t classifier-train .
 ```  
 
 Run the training container by mounting the above volumes:
 ```sh
-$ docker run -v $TRAIN_DB:/train.db -v $MODEL_FILE:/model.bin classifier-train
+docker run -v $TRAIN_DB:/train.db -v $MODEL_FILE:/model.bin classifier-train
 ```
 
 * `$TRAIN_DB` is the full path of the input sqlite DB storing the training set, e.g., `/data/example/train.db`.
 * `$MODEL_FILE` is the full path to the output fastText trained model, e.g., `/data/example/model.bin`.
 
 ### 4. Serve the model
-Build the docker image for serving:
+Build the docker image for the classification server:
 ```sh
-$ docker build -f serve.Dockerfile -t classifier-serve .
+docker build -f serve.Dockerfile -t classifier-serve .
 ```
 
 Run the serving container by mounting the trained model file and exposing the port:
 ```sh
-$ docker run -v $MODEL_FILE:/model.bin -p 8000:8000 classifier-serve
+docker run -v $MODEL_FILE:/model.bin -p 8000:8000 classifier-serve
 ```
 
 ### 5. Post an inference HTTP request
@@ -108,10 +108,10 @@ Then in reply you will get back a list of scores, indicating the likelihoods of 
 ]
 ```
 
-You can test the API using `curl` as follows:
+You can test the classifier API using `curl` as follows:
 
 ```sh
-$ curl -X POST http://localhost:8000/classifier -H "Content-Type: application/json" -d $'{"texts":[{"id":0,"text":"Three great forces rule the world: stupidity, fear and greed."},{"id":1,"text":"Put your hand on a hot stove for a minute, and it seems like an hour. Sit with a pretty girl for an hour, and it seems like a minute. That\'s relativity."}]}'
+curl -X POST http://localhost:8000/classifier -H "Content-Type: application/json" -d $'{"texts":[{"id":0,"text":"Three great forces rule the world: stupidity, fear and greed."},{"id":1,"text":"Put your hand on a hot stove for a minute, and it seems like an hour. Sit with a pretty girl for an hour, and it seems like a minute. That\'s relativity."}]}'
 ```
 
 You will get the response like the following:
