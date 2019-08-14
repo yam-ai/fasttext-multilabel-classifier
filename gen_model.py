@@ -16,11 +16,7 @@
 from fasttext import train_supervised
 import getopt
 import sys
-
-# Hyperparameters
-LEARNING_RATE = 1.0
-WORD_N_GRAMS = 5
-EPOCH = 25
+from settings import LEARNING_RATE, WORD_N_GRAMS, EPOCH
 
 
 def gen_model_file(trainfile, modelfile, wordNgrams=WORD_N_GRAMS, lr=LEARNING_RATE, epoch=EPOCH):

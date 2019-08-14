@@ -22,8 +22,8 @@ import getopt
 from logging import getLogger, StreamHandler, Formatter, INFO
 from prepro import preprocess
 from falcon.media.validators import jsonschema
+from settings import TOP_LABELS
 
-TOP_LABELS = 10
 PORT = 8000
 
 predict_schema = {
