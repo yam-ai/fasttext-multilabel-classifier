@@ -1,0 +1,4 @@
+fasttext==0.9.1
+falcon==2.0.0
+jsonschema==3.0.2
+gunicorn==19.9.0

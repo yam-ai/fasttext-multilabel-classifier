@@ -18,9 +18,40 @@ import falcon
 from wsgiref import simple_server
 import serve
 from fasttext import load_model
+import getopt
+from logging import getLogger, StreamHandler, Formatter, INFO
+from prepro import preprocess
+from falcon.media.validators import jsonschema
 
 TOP_LABELS = 10
 PORT = 8000
+
+predict_schema = {
+    'title': 'Label texts',
+    'description': 'Predict labels to be assigned on texts',
+    'type': 'object',
+    'required': ['texts'],
+    'properties': {
+        'texts': {
+            'type': 'array',
+            'description': 'A list of texts for labeling',
+            'items': {
+                'type': 'object',
+                'required': ['id', 'text'],
+                'properties': {
+                    'id': {
+                        'type': 'integer',
+                        'description': 'The id of the text'
+                    },
+                    'text': {
+                        'type': 'string',
+                        'description': 'A string of text'
+                    }
+                }
+            }
+        }
+    }
+}
 
 
 class MultiLabelClassifierServer:
@@ -33,21 +64,23 @@ class MultiLabelClassifierServer:
 
 
 class ClassifierResource:
-    def __init__(self, classifier, k):
+    def __init__(self, logger, classifier, k):
         self.classifier = classifier
         self.k = k
+        self.logger = logger
 
+    @jsonschema.validate(predict_schema)
     def on_post(self, req, resp):
         items = req.media.get('texts')
         results = []
         for item in items:
-            tid = item['id']
-            text = item['text']
+            tid = item.get('id')
+            text = item.get('text')
             try:
-                prediction = self.classifier.predict(text, self.k)
+                prediction = self.classifier.predict(preprocess(text), self.k)
             except Exception as e:
-                print('Error occurred during prediction: {}'.format(
-                    e), file=sys.stderr)
+                self.logger.error('Error occurred during prediction: {}'.format(
+                    e))
                 raise e
             scores = {}
             for label, score in prediction:
@@ -59,24 +92,57 @@ class ClassifierResource:
         resp.media = results
 
 
-def create_app(model_file):
-    classifier = MultiLabelClassifierServer(model_file)
-    app = falcon.API()
-    app.add_route('/classifier', ClassifierResource(classifier, TOP_LABELS))
+def create_app(progname, model_file, port):
+    ch = StreamHandler()
+    ch.setFormatter(
+        Formatter(
+            '[%(asctime)s] [%(process)d] [%(levelname)s] %(message)s',
+            '%Y-%m-%d %H:%M:%S %z')
+    )
+    logger = getLogger(__name__)
+    logger.addHandler(ch)
+    logger.setLevel(INFO)
+    try:
+        classifier = MultiLabelClassifierServer(model_file)
+        app = falcon.API()
+        app.add_route(
+            '/classifier', ClassifierResource(logger, classifier, TOP_LABELS))
+    except Exception as e:
+        logger.error('Failed to initialize with model file {}: {}'.format(
+            model_file, e))
+        sys.exit(1)
+    logger.info('Serving classifier on port {}...'.format(port))
     return app
 
 
-if __name__ == '__main__':
-    if len(sys.argv) == 1:
-        print('Usage: {} model_file'.format(sys.argv[0]), file=sys.stderr)
-        sys.exit(1)
-    model_file = sys.argv[1]
+def main(argv):
+    progname = argv[0]
     try:
-        app = create_app(model_file)
+        opts, _ = getopt.getopt(argv[1:], 'm:p:')
     except Exception as e:
-        print('Failed to initialize with model file {}: {}'.format(
-            model_file, e), file=sys.stderr)
-        sys.exit(1)
-    with simple_server.make_server('', PORT, app) as httpd:
-        print('Serving HTTP on port {}...'.format(PORT))
+        usage(argv[0])
+    model_file = None
+    port = PORT
+    for opt, arg in opts:
+        if opt == '-m':
+            model_file = arg
+            continue
+        if opt == '-p':
+            try:
+                port = int(arg)
+            except:
+                usage(argv[0], Exception('Invald port {}'.format(arg)))
+    app = create_app(progname, model_file, port)
+    with simple_server.make_server('', port, app) as httpd:
         httpd.serve_forever()
+
+
+def usage(progname, e=None):
+    print('Usage: {} model_file [port]'.format(sys.argv[0]), file=sys.stderr)
+    if e:
+        print(e, file=sys.stderr)
+    sys.exit(1)
+
+
+if __name__ == '__main__':
+    main(sys.argv)

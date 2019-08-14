@@ -19,12 +19,10 @@ COPY . /src/
 
 RUN apk add --update \
     build-base \
-    && pip install -r /src/train_requirements.txt
+    && pip install -r /src/serve_requirements.txt
 
-ENV TRAIN_FILE=/train.db
 ENV MODEL_FILE=/model.bin
 ENV SRC_DIR=/src
+ENV PORT=8000
 
-CMD ["/src/train.sh"]
-
-
+CMD ["/src/serve.sh"]

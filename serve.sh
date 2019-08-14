@@ -1,3 +1,4 @@
+#!/bin/sh
 # Copyright 2019 YAM AI Machinery Limited
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,19 +13,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM python:3.7.4-alpine3.10
-
-WORKDIR /src/
-COPY . /src/
-
-RUN apk add --update \
-    build-base \
-    && pip install -r /src/train_requirements.txt
-
-ENV TRAIN_FILE=/train.db
-ENV MODEL_FILE=/model.bin
-ENV SRC_DIR=/src
-
-CMD ["/src/train.sh"]
-
-
+gunicorn -b 0.0.0.0:${PORT} "serve:create_app(\"$0\", \"${MODEL_FILE}\", ${PORT})"

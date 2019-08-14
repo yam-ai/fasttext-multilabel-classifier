@@ -21,12 +21,13 @@ import tempfile
 
 
 def main(argv):
+    progname = argv[0]
     try:
         opts, _ = getopt.getopt(argv[1:], 'i:o:')
     except Exception as e:
         usage(argv[0])
-    db_file = ''
-    model_file = ''
+    db_file = None
+    model_file = None
     for opt, arg in opts:
         if opt == '-i':
             db_file = arg
@@ -35,18 +36,19 @@ def main(argv):
             model_file = arg
             continue
     if not db_file:
-        usage(argv[0], 'Missing db_file')
+        usage(progname, 'Missing db_file')
     if not model_file:
-        usage(argv[0], 'Missing model_file')
+        usage(progname, 'Missing model_file')
     temp_file = tempfile.NamedTemporaryFile()
     gen_train_file(db_file, temp_file.name)
     gen_model_file(temp_file.name, model_file)
     temp_file.close()
 
 
-def usage(progname, e=''):
+def usage(progname, e=None):
     print('Usage: {} -i db_file -o model_file'.format(progname), file=sys.stderr)
-    print(e, file=sys.stderr)
+    if e:
+        print(e, file=sys.stderr)
     sys.exit(1)
 
 
