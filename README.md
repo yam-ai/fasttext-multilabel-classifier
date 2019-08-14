@@ -23,11 +23,11 @@ CREATE INDEX IF NOT EXISTS label_index ON labels (label);
 CREATE INDEX IF NOT EXISTS text_id_index ON labels (text_id);
 ```
 
-An empty example sqlite file is in `example/data.db`.
+An empty example sqlite file is in [`example/data.db`](https://github.com/yam-ai/fasttext-multilabel-classifier/blob/master/example/data.db).
 
 Let us take the [toxic comment dataset](https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge/data) published on [kaggle](https://www.kaggle.com/) as an example. (Note: you will need to create a kaggle account in order to download the dataset.) The training data file `train.csv` (not provided by this repository) in the downloaded dataset has the following columns: `id`, `comment_text`, `toxic`, `severe_toxic`, `obscene`, `threat`, `insult`, `identity_hate`. The last six columns represent the labels of the `comment_text`.
 
-The python script in `example/csv2sqlite.py` can process `train.csv` and save the data in a sqlite file `data.db`.
+The python script in [`example/csv2sqlite.py`](https://github.com/yam-ai/fasttext-multilabel-classifier/blob/master/example/csv2sqlite.py) can process `train.csv` and save the data in a sqlite file `data.db`.
 
 To convert `train.csv` to `data.db`, run the following commands:
 ```sh
@@ -36,7 +36,7 @@ $ python3 csv2sqlite.py -i /downloads/toxic-comment/train.csv -o /repos/bert-mul
 You can also use the `-n` flag to convert only a subset of examples in the training csv file to reduce the training database size. For example, you can use `-n 1000` to convert only the first 1,000 examples in the csv file into the training database. This may be necessary if there is not enough memory to train the model with the entire raw training set or you want to shorten the training time.
 
 ### 2. Tune the parameters
-The training and serving parameters can be modified in `settings.py`.
+The training and serving parameters can be modified in [`settings.py`](https://github.com/yam-ai/fasttext-multilabel-classifier/blob/master/settings.py).
 
 ### 3. Train the model
 Build the docker image for training:
