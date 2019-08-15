@@ -112,6 +112,7 @@ def create_app(progname, model_file, port):
             model_file, e))
         sys.exit(1)
     logger.info('Serving classifier on port {}...'.format(port))
+    logger.info('Number of top labels: {}'.format(TOP_LABELS))
     return app
 
 

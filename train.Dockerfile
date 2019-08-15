@@ -14,17 +14,17 @@
 
 FROM python:3.7.4-alpine3.10
 
-WORKDIR /src/
-COPY . /src/
+WORKDIR /
+COPY . /
 
 RUN apk add --update \
     build-base \
-    && pip install -r /src/train_requirements.txt
+    && pip install -r /train_requirements.txt
 
 ENV TRAIN_FILE=/train.db
 ENV MODEL_FILE=/model.bin
-ENV SRC_DIR=/src
+ENV SRC_DIR=/
 
-CMD ["/src/train.sh"]
+CMD ["/train.sh"]
 
 
