@@ -14,15 +14,17 @@
 
 FROM python:3.7.4-alpine3.10
 
-WORKDIR /src/
-COPY . /src/
+WORKDIR /srv/
+COPY . /srv/
+
+VOLUME [ "/model" ]
 
 RUN apk add --update \
     build-base \
-    && pip install -r /src/serve_requirements.txt
+    && pip install -r /srv/serve_requirements.txt
 
-ENV MODEL_FILE=/model.bin
-ENV SRC_DIR=/src
+ENV MODEL_DIR=/model
+ENV SRC_DIR=/srv
 ENV PORT=8000
 
-CMD ["/src/serve.sh"]
+CMD ["/srv/serve.sh"]
