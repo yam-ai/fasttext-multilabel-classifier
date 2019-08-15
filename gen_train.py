@@ -16,7 +16,7 @@
 import sys
 import re
 import getopt
-from sqlite3 import connect, Error
+import sqlite3
 from prepro import normalize_spaces, remove_symbols, preprocess
 
 
@@ -28,9 +28,9 @@ def format_label(label):
 
 def gen_train_file(dbfile, trainfile):
     try:
-        conn = connect(dbfile)
+        conn = sqlite3.connect(dbfile)
     except Exception as e:
-        raise Exception('Failed to read DB {}: {}'.format(
+        raise Exception('Failed to read database {}: {}'.format(
             dbfile, e), file=sys.stderr)
 
     try:
@@ -64,9 +64,9 @@ def gen_train_file(dbfile, trainfile):
             if i % 1000 == 0:
                 print('Written {} rows to training file {}.'.format(i, trainfile))
         print('Written {} rows to training file {}.'.format(i, trainfile))
-    except Error as e:
+    except sqlite3.Error as e:
         raise Exception(
-            'Error reading training DB {}: {}'.format(trainfile, e))
+            'Error reading training database {}: {}'.format(dbfile, e))
     except IOError as e:
         raise Exception(
             'Error writing training file {}: {}'.format(trainfile, e))

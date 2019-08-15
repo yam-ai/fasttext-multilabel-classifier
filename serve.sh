@@ -13,4 +13,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-gunicorn -b 0.0.0.0:${PORT} "serve:create_app(\"$0\", \"${MODEL_FILE}\", ${PORT})"
+gunicorn -b 0.0.0.0:${PORT} "serve:create_app(\"$0\", \"${MODEL_DIR}\", ${PORT})"

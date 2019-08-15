@@ -13,10 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Common Parameters
+MODEL_BIN = 'model.bin'
+
 # Parameters for training
 LEARNING_RATE = 1.0
 WORD_N_GRAMS = 5
 EPOCH = 25
+LOSS = 'ova'
+TRAIN_DB = 'train.db'
 
 # Parameters for serving
 TOP_LABELS = 10

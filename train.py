@@ -13,10 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import getopt
 import sys
+import os
+import getopt
 from gen_train import gen_train_file
 from gen_model import gen_model_file
+from settings import TRAIN_DB, MODEL_BIN
 import tempfile
 
 
@@ -26,27 +28,30 @@ def main(argv):
         opts, _ = getopt.getopt(argv[1:], 'i:o:')
     except Exception as e:
         usage(argv[0])
-    db_file = None
-    model_file = None
+    db_dir = None
+    model_dir = None
     for opt, arg in opts:
         if opt == '-i':
-            db_file = arg
+            db_dir = arg
             continue
         if opt == '-o':
-            model_file = arg
+            model_dir = arg
             continue
-    if not db_file:
-        usage(progname, 'Missing db_file')
-    if not model_file:
-        usage(progname, 'Missing model_file')
+    if not db_dir:
+        usage(progname, 'Missing train_dir')
+    if not model_dir:
+        usage(progname, 'Missing model_dir')
     temp_file = tempfile.NamedTemporaryFile()
-    gen_train_file(db_file, temp_file.name)
-    gen_model_file(temp_file.name, model_file)
+    try:
+        gen_train_file(os.path.join(db_dir, TRAIN_DB), temp_file.name)
+        gen_model_file(temp_file.name, os.path.join(model_dir, MODEL_BIN))
+    except Exception as e:
+        print(e, file=sys.stderr)
     temp_file.close()
 
 
 def usage(progname, e=None):
-    print('Usage: {} -i db_file -o model_file'.format(progname), file=sys.stderr)
+    print('Usage: {} -i train_dir -o model_dir'.format(progname), file=sys.stderr)
     if e:
         print(e, file=sys.stderr)
     sys.exit(1)
