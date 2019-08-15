@@ -13,4 +13,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-python3 $SRC_DIR/train.py -i $TRAIN_FILE -o $MODEL_FILE
+python3 $SRC_DIR/train.py -i $TRAIN_DIR -o $MODEL_DIR

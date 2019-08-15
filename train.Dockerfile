@@ -14,17 +14,19 @@
 
 FROM python:3.7.4-alpine3.10
 
-WORKDIR /
-COPY . /
+WORKDIR /srv/
+COPY . /srv/
+
+VOLUME [ "/train", "/model" ]
 
 RUN apk add --update \
     build-base \
-    && pip install -r /train_requirements.txt
+    && pip install -r /srv/train_requirements.txt
 
-ENV TRAIN_FILE=/train.db
-ENV MODEL_FILE=/model.bin
-ENV SRC_DIR=/
+ENV TRAIN_DIR=/train
+ENV MODEL_DIR=/model
+ENV SRC_DIR=/srv
 
-CMD ["/train.sh"]
+CMD ["/srv/train.sh"]
 
 

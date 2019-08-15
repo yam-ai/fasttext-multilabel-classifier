@@ -16,15 +16,16 @@
 from fasttext import train_supervised
 import getopt
 import sys
-from settings import LEARNING_RATE, WORD_N_GRAMS, EPOCH
+from settings import LEARNING_RATE, WORD_N_GRAMS, EPOCH, LOSS
 
 
-def gen_model_file(trainfile, modelfile, wordNgrams=WORD_N_GRAMS, lr=LEARNING_RATE, epoch=EPOCH):
+def gen_model_file(trainfile, modelfile, wordNgrams=WORD_N_GRAMS, lr=LEARNING_RATE, epoch=EPOCH, loss=LOSS):
     print('Input training file: {}'.format(trainfile))
     print('Output model file: {}'.format(modelfile))
     print('Learning rate: {}'.format(lr))
     print('Word n-grams: {}'.format(wordNgrams))
     print('Epoch: {}'.format(epoch))
+    print('Loss: {}'.format(loss))
     try:
         model = train_supervised(
             trainfile, wordNgrams=wordNgrams, lr=lr, epoch=epoch)

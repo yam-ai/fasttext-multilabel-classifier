@@ -14,6 +14,7 @@
 # limitations under the License.
 
 import sys
+import os
 import falcon
 from wsgiref import simple_server
 import serve
@@ -22,7 +23,7 @@ import getopt
 from logging import getLogger, StreamHandler, Formatter, INFO
 from prepro import preprocess
 from falcon.media.validators import jsonschema
-from settings import TOP_LABELS
+from settings import TOP_LABELS, MODEL_BIN
 
 PORT = 8000
 
@@ -92,7 +93,7 @@ class ClassifierResource:
         resp.media = results
 
 
-def create_app(progname, model_file, port):
+def create_app(progname, model_dir, port):
     ch = StreamHandler()
     ch.setFormatter(
         Formatter(
@@ -103,14 +104,15 @@ def create_app(progname, model_file, port):
     logger.addHandler(ch)
     logger.setLevel(INFO)
     try:
-        classifier = MultiLabelClassifierServer(model_file)
+        classifier = MultiLabelClassifierServer(
+            os.path.join(model_dir, MODEL_BIN))
         app = falcon.API()
         app.add_route(
             '/classifier', ClassifierResource(logger, classifier, TOP_LABELS))
     except Exception as e:
-        logger.error('Failed to initialize with model file {}: {}'.format(
-            model_file, e))
-        sys.exit(1)
+        logger.error('Failed to initialize with model directory {}: {}'.format(
+            model_dir, e))
+        sys.exit(4)  # tell gunicorn to exit
     logger.info('Serving classifier on port {}...'.format(port))
     logger.info('Number of top labels: {}'.format(TOP_LABELS))
     return app
@@ -122,24 +124,24 @@ def main(argv):
         opts, _ = getopt.getopt(argv[1:], 'm:p:')
     except Exception as e:
         usage(argv[0])
-    model_file = None
+    model_dir = None
     port = PORT
     for opt, arg in opts:
         if opt == '-m':
-            model_file = arg
+            model_dir = arg
             continue
         if opt == '-p':
             try:
                 port = int(arg)
             except:
                 usage(argv[0], Exception('Invald port {}'.format(arg)))
-    app = create_app(progname, model_file, port)
+    app = create_app(progname, model_dir, port)
     with simple_server.make_server('', port, app) as httpd:
         httpd.serve_forever()
 
 
 def usage(progname, e=None):
-    print('Usage: {} model_file [port]'.format(sys.argv[0]), file=sys.stderr)
+    print('Usage: {} model_dir [port]'.format(sys.argv[0]), file=sys.stderr)
     if e:
         print(e, file=sys.stderr)
     sys.exit(1)
