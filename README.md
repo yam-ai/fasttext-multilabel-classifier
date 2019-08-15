@@ -71,7 +71,7 @@ If you want to override the default settings with your modified settings, for ex
 
 ### 5. Post an inference HTTP request
 
-Make an HTTP POST request to `http://localhost:8000/classifier` with a JSON body like the following:
+Make an HTTP POST request to `http://localhost:8000/classifier` with a JSON body which contains the texts to be labeled, like the following (two Albert Einstein quotes):
 ```json
 { 
    "texts":[ 
@@ -87,7 +87,7 @@ Make an HTTP POST request to `http://localhost:8000/classifier` with a JSON body
 }
 ```
 
-The classifier returns a list of scores for the labels, indicating the likelihoods of the labels assigned to the input texts (e.g., two Albert Einstein quotes as follows):
+The classifier returns a list of scores for the labels, indicating the likelihoods of the labels assigned to the input texts:
 ```json
 [  
    {  
