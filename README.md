@@ -52,7 +52,7 @@ docker run -v $TRAIN_DIR:/train -v $MODEL_DIR:/model classifier-train
 * `TRAIN_DIR` is the full path of the input directory that contains the sqlite DB `train.db` storing the training set, e.g., `TRAIN_DIR=/data/example/train/`.
 * `MODEL_DIR` is the full path to the output directory that stores the fastText trained model `model.bin` to be generated, e.g., `MODEL_DIR=/data/example/model/`.
 
-If you want to override the default `settings.py` with your modified `settings.py` stored in `/data/example/settings.py`, you can add the flag `-v /data/example/settings.py:/srv/settings.py`.
+If you want to override the default settings with your modified settings, for example, in `/data/example/settings.py`, you can add the flag `-v /data/example/settings.py:/srv/settings.py`.
 
 ### 4. Serve the model
 Build the docker image for the classifier server:
@@ -67,7 +67,7 @@ docker run -v $MODEL_DIR:/model -p 8000:8000 classifier-serve
 
 * `MODEL_DIR` is the full path of the directory that stores the trained model `model.bin` generated in the above step.
 
-If you want to override the default `settings.py` with your modified `settings.py` stored in `/data/example/settings.py`, you can add the flag `-v /data/example/settings.py:/srv/settings.py`.
+If you want to override the default settings with your modified settings, for example, in `/data/example/settings.py`, you can add the flag `-v /data/example/settings.py:/srv/settings.py`.
 
 ### 5. Post an inference HTTP request
 
