@@ -40,6 +40,8 @@ def main(argv):
         opts, _ = getopt.getopt(argv[1:], 'i:o:')
     except Exception as e:
         usage(argv[0])
+    trainfile = None
+    modelfile = None
     try:
         for opt, arg in opts:
             if opt == '-i':
@@ -61,9 +63,10 @@ def main(argv):
         print('Error: {}'.format(e), file=sys.stderr)
 
 
-def usage(progname, e=''):
+def usage(progname, e=None):
     print('Usage: {} -i train_file -o model_file'.format(progname), file=sys.stderr)
-    print(e, file=sys.stderr)
+    if e:
+        print(e, file=sys.stderr)
     sys.exit(1)
 
 
