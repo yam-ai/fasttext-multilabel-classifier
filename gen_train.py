@@ -74,8 +74,8 @@ def gen_train_file(dbfile, trainfile):
 
 
 def main(argv):
-    trainfile = ''
-    dbfile = ''
+    trainfile = None
+    dbfile = None
     try:
         opts, _ = getopt.getopt(argv[1:], 'i:o:')
         for opt, arg in opts:
@@ -101,10 +101,11 @@ def main(argv):
         sys.exit(1)
 
 
-def usage(progname, e=''):
+def usage(progname, e=None):
     print('Usage: {} -i db_file -o train_file'.format(progname),
           file=sys.stderr)
-    print(e, file=sys.stderr)
+    if e:
+        print(e, file=sys.stderr)
     sys.exit(1)
 
 
