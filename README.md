@@ -89,27 +89,27 @@ Make an HTTP POST request to `http://localhost:8000/classifier` with a JSON body
 
 The classifier returns a list of scores for the labels, indicating the likelihoods of the labels assigned to the input texts:
 ```json
-[  
-   {  
+[ 
+   { 
       "id":0,
-      "scores":{  
-         "toxic":0.8545703887939453,
-         "insult":0.0912848711013794,
-         "obscene":0.03816186636686325,
-         "identity_hate":0.010618389584124088,
-         "threat":0.002825390547513962,
-         "severe_toxic":0.002599082887172699
+      "scores":{ 
+         "toxic":1.0000100135803223,
+         "insult":0.148057222366333,
+         "obscene":0.0023331623524427414,
+         "identity_hate":0.0007654056535102427,
+         "threat":1.0000003385357559e-05,
+         "severe_toxic":1.0000003385357559e-05
       }
    },
-   {  
+   { 
       "id":1,
-      "scores":{  
-         "toxic":0.6361832022666931,
-         "obscene":0.18262064456939697,
-         "insult":0.17715336382389069,
-         "identity_hate":0.0023004263639450073,
-         "severe_toxic":0.0016128194984048605,
-         "threat":0.00018951903621200472
+      "scores":{ 
+         "toxic":0.9919480085372925,
+         "insult":0.4225146174430847,
+         "obscene":0.3998216390609741,
+         "identity_hate":1.0000003385357559e-05,
+         "threat":1.0000003385357559e-05,
+         "severe_toxic":1.0000003385357559e-05
       }
    }
 ]
@@ -120,11 +120,30 @@ You can test the classifier API using `curl` as follows:
 curl -X POST http://localhost:8000/classifier -H "Content-Type: application/json" -d $'{"texts":[{"id":0,"text":"Three great forces rule the world: stupidity, fear and greed."},{"id":1,"text":"Put your hand on a hot stove for a minute, and it seems like an hour. Sit with a pretty girl for an hour, and it seems like a minute. That\'s relativity."}]}'
 ```
 
-### 6. Profesional services
+### 6. Pull docker images from Docker Hub
+We have published the docker images on the Docker Hub. You can pull them directly from the Docker Hub as follows:
 
-If you need any consultancy and support services from [YAM AI Machinery](https://www.yam.ai), please find us at:
+```sh
+docker pull yamai/fasttext-multilabel-classifier:train-latest
+docker pull yamai/fasttext-multilabel-classifier:serve-latest
+```
+
+After these images are successfully pulled, you can run the training or serving container as follows:
+
+```sh
+docker run -v $TRAIN_DIR:/train -v $MODEL_DIR:/model yamai/fasttext-multilabel-classifier:train-latest
+```
+or
+```sh
+docker run -v $MODEL_DIR:/model -p 8000:8000 yamai/fasttext-multilabel-classifier:serve-latest
+```
+
+### 7. Profesional services
+
+If you need any supporting resources or consultancy services from [YAM AI Machinery](https://www.yam.ai), please find us at:
 * https://www.yam.ai
-* https://github.com/yam-ai
 * https://twitter.com/theYAMai
 * https://www.linkedin.com/company/yamai
 * https://www.facebook.com/theYAMai
+* https://github.com/yam-ai
+* https://cloud.docker.com/u/yamai

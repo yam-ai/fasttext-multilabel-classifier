@@ -28,7 +28,7 @@ def gen_model_file(trainfile, modelfile, wordNgrams=WORD_N_GRAMS, lr=LEARNING_RA
     print('Loss: {}'.format(loss))
     try:
         model = train_supervised(
-            trainfile, wordNgrams=wordNgrams, lr=lr, epoch=epoch)
+            trainfile, wordNgrams=wordNgrams, lr=lr, epoch=epoch, loss=loss)
         model.save_model(modelfile)
     except Exception as e:
         raise Exception(
