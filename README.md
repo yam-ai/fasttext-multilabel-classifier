@@ -121,7 +121,7 @@ curl -X POST http://localhost:8000/classifier -H "Content-Type: application/json
 ```
 
 ### 6. Pull docker images from Docker Hub
-We have published the docker images on the Docker Hub. You can pull them directly from the Docker Hub as follows:
+We have published the docker images on the [Docker Hub](https://hub.docker.com/r/yamai/fasttext-multilabel-classifier). You can pull them directly from the Docker Hub as follows:
 
 ```sh
 docker pull yamai/fasttext-multilabel-classifier:train-latest
@@ -146,4 +146,4 @@ If you need any supporting resources or consultancy services from [YAM AI Machin
 * https://www.linkedin.com/company/yamai
 * https://www.facebook.com/theYAMai
 * https://github.com/yam-ai
-* https://cloud.docker.com/u/yamai
+* https://hub.docker.com/u/yamai
