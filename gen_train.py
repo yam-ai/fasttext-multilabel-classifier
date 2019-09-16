@@ -22,8 +22,8 @@ from prepro import normalize_spaces, remove_symbols, preprocess
 
 def format_label(label):
     return '__label__{}'.format(
-        normalize_spaces(
-            remove_symbols(label)).lower())
+        '_'.join(normalize_spaces(
+            remove_symbols(label)).lower().split()))
 
 
 def gen_train_file(dbfile, trainfile):

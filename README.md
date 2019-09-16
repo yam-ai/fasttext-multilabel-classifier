@@ -7,7 +7,9 @@ This project applies fastText to perform multilabel text classification and dock
 
 ## Usage
 
-### 1. Prepare the dataset as a sqlite database
+The instructions of building and running the classification trainer and server are described as follows. You may build the docker images from the source or [pull the docker images directly from the Docker Hub](#pull-docker-images-from-docker-hub).
+
+### Prepare the dataset as a sqlite database
 The training data is expected to be given as a [sqlite](https://www.sqlite.org/index.html) database. It consists of two tables, `texts` and `labels`, storing the texts and their associated labels:
 ```SQL
 CREATE TABLE IF NOT EXISTS texts (
@@ -35,10 +37,10 @@ python3 csv2sqlite.py -i /downloads/toxic-comment/train.csv -o /repos/bert-multi
 ```
 You can also use the `-n` flag to convert only a subset of examples in the training csv file to reduce the training database size. For example, you can use `-n 1000` to convert only the first 1,000 examples in the csv file into the training database. This may be necessary if there is not enough memory to train the model with the entire raw training set or you want to shorten the training time.
 
-### 2. Tune the parameters
+### Tune the parameters
 The training and serving parameters can be modified in [`settings.py`](https://github.com/yam-ai/fasttext-multilabel-classifier/blob/master/settings.py).
 
-### 3. Train the model
+### Train the model
 Build the docker image for training:
 ```sh
 docker build -f train.Dockerfile -t classifier-train .
@@ -54,7 +56,7 @@ docker run -v $TRAIN_DIR:/train -v $MODEL_DIR:/model classifier-train
 
 If you want to override the default settings with your modified settings, for example, in `/data/example/settings.py`, you can add the flag `-v /data/example/settings.py:/srv/settings.py`.
 
-### 4. Serve the model
+### Serve the model
 Build the docker image for the classifier server:
 ```sh
 docker build -f serve.Dockerfile -t classifier-serve .
@@ -69,7 +71,7 @@ docker run -v $MODEL_DIR:/model -p 8000:8000 classifier-serve
 
 If you want to override the default settings with your modified settings, for example, in `/data/example/settings.py`, you can add the flag `-v /data/example/settings.py:/srv/settings.py`.
 
-### 5. Post an inference HTTP request
+### Post an inference HTTP request
 
 Make an HTTP POST request to `http://localhost:8000/classifier` with a JSON body which contains the texts to be labeled, like the following (two Albert Einstein quotes):
 ```json
@@ -120,8 +122,8 @@ You can test the classifier API using `curl` as follows:
 curl -X POST http://localhost:8000/classifier -H "Content-Type: application/json" -d $'{"texts":[{"id":0,"text":"Three great forces rule the world: stupidity, fear and greed."},{"id":1,"text":"Put your hand on a hot stove for a minute, and it seems like an hour. Sit with a pretty girl for an hour, and it seems like a minute. That\'s relativity."}]}'
 ```
 
-### 6. Pull docker images from Docker Hub
-We have published the docker images on the [Docker Hub](https://hub.docker.com/r/yamai/fasttext-multilabel-classifier). You can pull them directly from the Docker Hub as follows:
+### Pull docker images from Docker Hub
+We have published the docker images on the [Docker Hub](https://hub.docker.com/r/yamai/fasttext-multilabel-classifier) so that you need not build the docker images from the source. You can pull them directly from the Docker Hub as follows:
 
 ```sh
 docker pull yamai/fasttext-multilabel-classifier:train-latest
@@ -138,7 +140,7 @@ or
 docker run -v $MODEL_DIR:/model -p 8000:8000 yamai/fasttext-multilabel-classifier:serve-latest
 ```
 
-### 7. Profesional services
+## Profesional services
 
 If you need any supporting resources or consultancy services from [YAM AI Machinery](https://www.yam.ai), please find us at:
 * https://www.yam.ai

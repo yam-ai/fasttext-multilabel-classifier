@@ -46,7 +46,8 @@ predict_schema = {
                     },
                     'text': {
                         'type': 'string',
-                        'description': 'A string of text'
+                        'description': 'A string of text',
+                        'minLength': 1
                     }
                 }
             }
@@ -82,7 +83,9 @@ class ClassifierResource:
             except Exception as e:
                 self.logger.error('Error occurred during prediction: {}'.format(
                     e))
-                raise e
+                raise falcon.HTTPInternalServerError(
+                    title='Internal server error',
+                    description='The service was unavailable. Please try again later.')
             scores = {}
             for label, score in prediction:
                 scores[label[9:]] = score
